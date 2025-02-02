@@ -49,3 +49,4 @@ POST	/chat	Accepts a session ID & user query, returns chatbot response
 
 ### Author
 Tharun Kumar T
+[LinkedIn](https://www.linkedin.com/in/tharun-kumar-t/)
