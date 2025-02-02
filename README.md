@@ -47,6 +47,40 @@ uvicorn app:app --host 0.0.0.0 --port 8000 --reload
 GET	/new_session	Generates a new chat session ID
 POST	/chat	Accepts a session ID & user query, returns chatbot response
 
+
+### Chunking Strategy
+Current Implementation:
+
+    Recursive Character Text Splitter:
+        Uses a fixed chunk size of 1000 tokens with an overlap of 100 tokens to ensure continuity between chunks.
+        Implemented using LangChain's RecursiveCharacterTextSplitter, which ensures context-aware chunking.
+    Header-Based Splitting:
+        Detects markdown headers (#, ##, etc.) and uses them as natural breakpoints.
+        This ensures that each chunk is semantically meaningful rather than arbitrarily split.
+    Sentence-Based Refinement:
+        After header-based splitting, if a chunk exceeds the limit, it is further split using RecursiveCharacterTextSplitter to maintain consistency.
+    Metadata Storage:
+        Each chunk retains the source file name as metadata, ensuring traceability during retrieval.
+
+
+### Parse Documents
+Current Implementation:
+Markdown Parsing (MarkdownIt):
+
+    Extracts clean, structured content from markdown files.
+    Removes extraneous characters while preserving formatting (headers, lists, code blocks).
+
+Recursive Directory Traversal (os.walk):
+
+    Recursively searches all subdirectories in ubuntu-docs/ for .md files.
+    Ensures no markdown files are missed during indexing.
+
+Regex-Based Header Detection (re.compile):
+
+    Identifies markdown headers (#, ##, etc.) for semantic chunking.
+    Splits text intelligently at key points, rather than breaking mid-paragraph.
+
+    
 ### Author
 Tharun Kumar T
 [LinkedIn](https://www.linkedin.com/in/tharun-kumar-t/)
